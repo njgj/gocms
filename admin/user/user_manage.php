@@ -1,5 +1,5 @@
 <?php
-include_once ('../global.php');
+require('../global.php');
 
 $action=$_GET['action'];
 $key=$_GET['key'];
@@ -27,7 +27,7 @@ if($action=='del'){
     <td height="30"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td width="15" height="30"><img src="../images/tab_03.gif" width="15" height="30" /></td>
-        <td width="115" background="../images/tab_05.gif"><img src="../images/311.gif" width="16" height="16" /><span class="title">用户</span></td>
+        <td width="115" background="../images/tab_05.gif"><img src="../images/tb.gif" width="16" height="16" /><span class="title">用户</span></td>
         <td align="right" background="../images/tab_05.gif"><form id="form1" name="form1" method="get" action="">
           <input type="text" name="key" id="key" />
           <select name="groupid">
@@ -41,7 +41,7 @@ if($action=='del'){
             ?>
           </select>
            <input type="submit" value="查询" />&nbsp;&nbsp;
-           <img src="../images/001.gif" width="14" height="14" />&nbsp;<a href="javascript:void(0);" onclick="newwin('user_add.php',420,210);">新增用户</a>
+           <img src="../images/add.gif" width="14" height="14" />&nbsp;<a href="javascript:void(0);" onclick="newwin('user_add.php',420,210);">新增用户</a>
         </form>
         </td>
         <td width="14"><img src="../images/tab_07.gif" width="14" height="30" /></td>
@@ -83,8 +83,8 @@ if($action=='del'){
             <td height="22" align="center"><?php echo $row['lastlogintime']?></td>
             <td align="center"><?php echo chkstates($row['states']) ?></td>
             <td height="22" align="center">
-            <img src="../images/037.gif" width="9" height="9" />[<a href="javascript:void(0);" onclick="newwin('user_edit.php?userid=<?php echo $row['userid'] ?>',420,210);">编辑</a>]
-            <img src="../images/010.gif" width="9" height="9" /> [<a href="javascript:void(0);" onClick="return confirm('删除《<?php echo $row['username'] ?>》，是否确定？')?newwin('?action=del&userid=<?php echo $row['userid']?>',1,1):false">删除</a>]
+            <img src="../images/write.gif" width="9" height="9" />[<a href="javascript:void(0);" onclick="newwin('user_edit.php?userid=<?php echo $row['userid'] ?>',420,210);">编辑</a>]
+            <img src="../images/del.gif" width="9" height="9" /> [<a href="javascript:void(0);" onClick="return confirm('删除《<?php echo $row['username'] ?>》，是否确定？')?newwin('?action=del&userid=<?php echo $row['userid']?>',1,1):false">删除</a>]
             <select name="states" onchange="newwin('?action=chk&userid=<?php echo $row['userid']?>&states='+this.options[selectedIndex].value,1,1);">
               <option selected>-审核-</option>
               <option value="1">已审核</option>

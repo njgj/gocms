@@ -1,5 +1,5 @@
 <?php
-include_once ('../global.php');
+require('../global.php');
 //管理
 $action=$_GET['action'];
 $id=(int)$_GET['id'];
@@ -29,7 +29,7 @@ if($action=='del'){
     <td height="30"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td width="15" height="30"><img src="../images/tab_03.gif" width="15" height="30" /></td>
-        <td width="115" background="../images/tab_05.gif"><img src="../images/311.gif" width="16" height="16" /><span class="title">产品管理</span></td>
+        <td width="115" background="../images/tab_05.gif"><img src="../images/tb.gif" width="16" height="16" /><span class="title">产品管理</span></td>
         <td align="right" background="../images/tab_05.gif"><form id="form1" name="form1" method="get" action="">
           <input type="text" name="key" id="key" />
           <select name="classid">
@@ -87,7 +87,7 @@ if($action=='del'){
             <td height="22" align="center"><?php echo $row['source']?></td>
             <td height="22" align="center"><?php echo $row['addtime']?></td>
             <td align="center"><?php echo chkstates($row['states']) ?></td>
-            <td height="22" align="center"><img src="../images/037.gif" width="9" height="9" />[<a href="javascript:;" onclick="newwin('cp_add.php?id=<?php echo $row['id']?>',800,500);">编辑</a>]&nbsp;&nbsp;<img src="../images/010.gif" width="9" height="9" /> [<a href="javascript:void(0);" onClick="return confirm('删除《<?php echo $row['cpname'] ?>》，是否确定？')?newwin('?action=del&id=<?php echo $row['id']?>',1,1):false">删除</a>]
+            <td height="22" align="center"><img src="../images/write.gif" width="9" height="9" />[<a href="javascript:;" onclick="newwin('cp_add.php?id=<?php echo $row['id']?>',800,500);">编辑</a>]&nbsp;&nbsp;<img src="../images/del.gif" width="9" height="9" /> [<a href="javascript:void(0);" onClick="return confirm('删除《<?php echo $row['cpname'] ?>》，是否确定？')?newwin('?action=del&id=<?php echo $row['id']?>',1,1):false">删除</a>]
               <select name="states" onchange="newwin('?action=chk&id=<?php echo $row['id']?>&states='+this.options[selectedIndex].value,1,1);">
                 <option selected="selected">-审核-</option>
                 <option value="1">已审核</option>

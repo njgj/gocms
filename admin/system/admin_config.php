@@ -1,6 +1,6 @@
 <?php
-include_once ('../global.php');
-
+require('../global.php');
+chk_admin('1');
 
 $path='../../configs/config.php';
 
@@ -22,7 +22,7 @@ if($_POST['update']){
     <td height="30"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td width="15" height="30"><img src="../images/tab_03.gif" width="15" height="30" /></td>
-        <td background="../images/tab_05.gif"><img src="../images/311.gif" width="16" height="16" /><span class="title">网站配置</span></td>
+        <td background="../images/tab_05.gif"><img src="../images/tb.gif" width="16" height="16" /><span class="title">网站配置</span></td>
         <td width="14"><img src="../images/tab_07.gif" width="14" height="30" /></td>
       </tr>
     </table></td>

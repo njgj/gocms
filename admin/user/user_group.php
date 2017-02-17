@@ -1,5 +1,6 @@
 <?php 
-include_once ('../global.php');
+require('../global.php');
+chk_admin('1');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,7 +12,7 @@ include_once ('../global.php');
 </head>
 <body>
 <br />
-<p align="center"><img src="../images/311.gif" width="16" height="16" />&nbsp;<a href="?action=">用户组列表</a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/001.gif" width="14" height="14" />&nbsp;<a href="?action=add">添加用户组</a></p>
+<p align="center"><img src="../images/tb.gif" width="16" height="16" />&nbsp;<a href="?action=">用户组列表</a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/add.gif" width="14" height="14" />&nbsp;<a href="?action=add">添加用户组</a></p>
 <?php
 switch($_GET['action']){
     case 'order':
@@ -143,7 +144,7 @@ switch($_GET['action']){
       <td height="25" align="center" bgcolor="#FFFFFF" ><?php echo $row['groupname'] ?></td>
       <td align="center" bgcolor="#FFFFFF"><?php echo $row['remark'] ?></td>
       <td height="25" align="center" bgcolor="#FFFFFF"><form action='?action=order&groupid=<?php echo $row['groupid'] ?>' method='post'><input type='text' name='orderid' size=5 value='<?php echo $row['orderid'] ?>'><input type='submit' value='修改'></form></td>
-      <td height="25" align="center" bgcolor="#FFFFFF"><img src="../images/037.gif" width="9" height="9" />[<a href="javascript:void(0);" onClick="newwin('user_group_qx.php?groupid=<?php echo $row['groupid']?>',200,400)">权限分配</a>]</td>
+      <td height="25" align="center" bgcolor="#FFFFFF"><img src="../images/write.gif" width="9" height="9" />[<a href="javascript:void(0);" onClick="newwin('user_group_qx.php?groupid=<?php echo $row['groupid']?>',200,400)">权限分配</a>]</td>
     </tr>
     <?php }?>
 </table>

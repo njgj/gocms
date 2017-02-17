@@ -1,5 +1,5 @@
 <?php
-include_once ('../global.php');
+require('../global.php');
 //参数
 $id=(int)$_GET['id'];
 $action=$_POST['action'];

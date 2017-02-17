@@ -1,5 +1,6 @@
 <?php 
-include_once ('../global.php');
+require('../global.php');
+chk_admin('1');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,7 +28,7 @@ KindEditor.ready(function(K) {
 </head>
 <body>
 <br />
-<p align="center"><img src="../images/311.gif" width="16" height="16" />&nbsp;<a href="?action=">栏目列表</a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/001.gif" width="14" height="14" />&nbsp;<a href="?action=add">添加栏目</a></p>
+<p align="center"><img src="../images/tb.gif" width="16" height="16" />&nbsp;<a href="?action=">栏目列表</a>&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/add.gif" width="14" height="14" />&nbsp;<a href="?action=add">添加栏目</a></p>
 <?php
 switch($_GET['action']){
     case 'order':
@@ -95,6 +96,7 @@ switch($_GET['action']){
 	    }
 		$sql = "INSERT INTO g_aboutus (classname,parentid,orderid,content,imgurl) VALUES('".$_POST['classname']."',".$_POST['parentid'].",".$_POST['orderid'].",'".$_POST['content']."','".$_POST['imgurl']."')";
 		$db -> query($sql);
+		savepath($db->insert_id(),$parentid);//更新classpath路径
 		htmlendjs('添加成功!','?action=');
 		break;
 	case 'edit':
@@ -169,6 +171,7 @@ switch($_GET['action']){
 			}else{
 				$sql = "update g_aboutus set classname='".$_POST['classname']."',parentid=".$_POST['parentid'].",orderid=".$_POST['orderid']." ,content='".$_POST['content']."',imgurl='".$_POST['imgurl']."' where classid=".$_POST['classid'];
 				$db -> query($sql);
+				savepath($_POST['classid'],$_POST['parentid']);//更新classpath路径
 				htmlendjs('修改成功!','?action=');
 			}
 		}
@@ -218,9 +221,9 @@ function nclass_arr($m=0,$fid=0)
 		echo "	  <td align=center  height=25>".$class_arr[$i][0]."</td>\n";
 		echo "	  <td align=left>".$n."├ <a href=\"?action=edit&classid=".$class_arr[$i][0]."\">".$class_arr[$i][1]."</a></td>\n";
 		echo "	  <td align=center><form action='?action=order&classid=".$class_arr[$i][0]."' method='post'><input type='text' name='orderid' size=5 value=".$class_arr[$i][3]."><input type='submit' value='修改'></form></td>\n";
-		echo "	  <td align=center><img src=\"../images/037.gif\" width=9 height=9 />[<a href=\"?action=add&classid=".$class_arr[$i][0]."\">新增</a>]";
-		echo " <img src=\"../images/037.gif\" width=9 height=9 />[<a href=\"?action=edit&classid=".$class_arr[$i][0]."\">修改</a>]";
-		echo " <img src=\"../images/010.gif\" width=9 height=9 />[<a href=\"?action=del&classid=".$class_arr[$i][0]."\" onClick=\"return confirm('删除《".$class_arr[$i][1]."》，是否确定？');\">删除</a>]";
+		echo "	  <td align=center><img src=\"../images/write.gif\" width=9 height=9 />[<a href=\"?action=add&classid=".$class_arr[$i][0]."\">新增</a>]";
+		echo " <img src=\"../images/write.gif\" width=9 height=9 />[<a href=\"?action=edit&classid=".$class_arr[$i][0]."\">修改</a>]";
+		echo " <img src=\"../images/del.gif\" width=9 height=9 />[<a href=\"?action=del&classid=".$class_arr[$i][0]."\" onClick=\"return confirm('删除《".$class_arr[$i][1]."》，是否确定？');\">删除</a>]";
 		echo "</td>\n";
 		echo "</tr>\n";		
 			nclass_arr($m+1,$class_arr[$i][0]);
@@ -232,12 +235,29 @@ function nclass_arr($m=0,$fid=0)
 function delclass($classid){
 	global $db;
     if($classid){
-		$classpath=getClassPath('g_aboutus',$classid); 
-		$db->query("delete from g_aboutus where classid in ($classpath)");
+		//$classpath=getClassPath('g_nclass_link',$classid); 
+		//$db->query("delete from g_news where classid in (select classid from g_class where locate(',$classid,',classpath)>0)");
+		$db->query("delete from g_aboutus where locate(',$classid,',classpath)>0");
 		return true;
 	}else{
 		return false;
 	}
 	return false;
+}
+
+//保存classpath路径,newid:当前插入操作ID
+function savepath($newid,$parentid){
+	global $db;
+	if(empty($newid)){ return false; }
+	if($parentid==0){ 
+		$classpath='0,'.$newid.',';
+	}else{
+		$sql='select classpath from g_aboutus where classid='.(int)$parentid;
+		$query = $db -> query($sql);
+		if($row = $db -> fetch_array($query)){
+			$classpath=$row['classpath'].$newid.','; //父节点的路径	
+		}
+	}
+	return $db -> query("update g_aboutus set classpath='$classpath' where classid=".(int)$newid);
 }
 ?>

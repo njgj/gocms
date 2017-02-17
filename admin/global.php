@@ -18,4 +18,11 @@ date_default_timezone_set('PRC');
 $db=new action();
 //用户验证
 $db->Get_user_check();
+//用户组验证 groupid:'1,2,3'
+function chk_admin($groupid){
+    if(strpos(','.$groupid.',' , ','.$_SESSION['groupid'].',')===false){
+	    echo "没有权限";
+	    exit();
+	}
+}
 ?>

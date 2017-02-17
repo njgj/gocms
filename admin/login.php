@@ -1,6 +1,6 @@
 <?php
-include_once ('../global.php');
-include_once ("common/action.class.php"); //用户操作类
+require('../global.php');
+require("common/action.class.php"); //用户操作类
 
 //初始化数据库类
 $db=new action();

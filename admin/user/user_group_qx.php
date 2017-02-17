@@ -1,5 +1,6 @@
 <?php 
-include_once ('../global.php');
+require('../global.php');
+chk_admin('1');
 
 $groupid=$_GET['groupid'];
 if($_GET['action']=='edit'){

@@ -1,5 +1,5 @@
 <?php
-include_once ("global.php");
+require("global.php");
 $qx=$db -> get_one("select qx from g_user_group where groupid=".$_SESSION['groupid']);
 if(empty($qx)){ exit('没有权限'); }
 ?>

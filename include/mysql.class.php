@@ -130,7 +130,9 @@ class db {
 	*/
 	function insert_id() {
 		if($this->dbtype=='mysql'){
-	    return ($id = mysql_insert_id($this->link)) >= 0 ? $id : $this->result($this->query("SELECT last_insert_id()"), 0);
+	    //return ($id = mysql_insert_id($this->link)) >= 0 ? $id : $this->result($this->query("SELECT last_insert_id()"), 0);
+		//mysql_insert_id() expects parameter 1 to be resource?
+		return ($id = mysql_insert_id()) >= 0 ? $id : $this->result($this->query("SELECT last_insert_id()"), 0);
 		}
 		if($this->dbtype=='sqlsrv'){
 		return $this->result($this->query("SELECT @@IDENTITY"), 0);

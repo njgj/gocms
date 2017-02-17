@@ -65,18 +65,14 @@ switch($_GET['action']){
   <?php
 		break;
 	case 'act_add':
-	    $parentid=$_POST['parentid'];
-		if(!$_POST['classname']){
+	    if(!$_POST['classname']){
 	    	htmlendjs('分类名称不能为空！','');
 	    }
 		if(!is_numeric($_POST['orderid'])){
 	    	htmlendjs('排序不能为空且为数字！','');
 	    }
-		
-		$sql = "INSERT INTO g_nclass (classname,parentid,orderid) VALUES('".$_POST['classname']."',".$parentid.",".$_POST['orderid'].")";
+		$sql = "INSERT INTO g_nclass (classname,parentid,orderid) VALUES('".$_POST['classname']."',".$_POST['parentid'].",".$_POST['orderid'].")";
 		$db -> query($sql);
-		savepath($db->insert_id(),$parentid);//更新classpath路径
-		
 		htmlendjs('添加成功!','?action=');
 		break;
 	case 'edit':
@@ -145,12 +141,10 @@ switch($_GET['action']){
 			}else{
 				$sql = "update g_nclass set classname='".$_POST['classname']."',parentid=".$_POST['parentid'].",orderid=".$_POST['orderid']." where classid=".$_POST['classid'];
 				$db -> query($sql);
-				savepath($_POST['classid'],$_POST['parentid']);//更新classpath路径
 				htmlendjs('修改成功!','?action=');
 			}
 		}
 		break;
-		
 	case 'del':
 		if(delclass($_GET['classid'])){
 			htmlendjs('删除成功!','?action=');
@@ -167,7 +161,7 @@ switch($_GET['action']){
     <table width="600" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#D9F1BA">
     <tr>
       <td width="46" align="center" background="../images/tab_14.gif" >ID</td>
-      <td height="25" align="center" background="../images/tab_14.gif" >分类名称</td>
+      <td width="264" height="25" align="center" background="../images/tab_14.gif" >分类名称</td>
       <td width="105" height="25" align="center" background="../images/tab_14.gif">排序</td>
       <td width="180" height="25" align="center" background="../images/tab_14.gif">操作</td>
       </tr>
@@ -195,7 +189,7 @@ function nclass_arr($m=0,$fid=0)
 		echo "<tr bgcolor=\"#FFFFFF\" onMouseMove=\"this.style.backgroundColor='#F0F8FF'\" onMouseOut=\"this.style.backgroundColor='#FFFFFF'\">\n";
 		echo "	  <td align=center  height=25>".$class_arr[$i][0]."</td>\n";
 		echo "	  <td align=left>".$n."├ <a href=\"?action=edit&classid=".$class_arr[$i][0]."\">".$class_arr[$i][1]."</a></td>\n";
-		echo "	  <td align=center><form action='?action=order&classid=".$class_arr[$i][0]."' method='post'><input type='text' name='orderid' size=3 value=".$class_arr[$i][3]."><input type='submit' value='修改'></form></td>\n";
+		echo "	  <td align=center><form action='?action=order&classid=".$class_arr[$i][0]."' method='post'><input type='text' name='orderid' size=5 value=".$class_arr[$i][3]."><input type='submit' value='修改'></form></td>\n";
 		echo "	  <td align=center><img src=\"../images/write.gif\" width=9 height=9 />[<a href=\"?action=add&classid=".$class_arr[$i][0]."\">新增</a>]";
 		echo " <img src=\"../images/write.gif\" width=9 height=9 />[<a href=\"?action=edit&classid=".$class_arr[$i][0]."\">修改</a>]";
 		echo " <img src=\"../images/del.gif\" width=9 height=9 />[<a href=\"?action=del&classid=".$class_arr[$i][0]."\" onClick=\"return confirm('删除《".$class_arr[$i][1]."》，是否确定？\\n\\n注意：将删除该类别相关的所有信息，请谨慎操作！');\">删除</a>]";
@@ -210,29 +204,13 @@ function nclass_arr($m=0,$fid=0)
 function delclass($classid){
 	global $db;
     if($classid){
-		//$classpath=getClassPath('g_nclass',$classid); 
-		//$db->query("delete from g_news where classid in (select classid from g_class where locate(',$classid,',classpath)>0)");
-		$db->query("delete from g_nclass where locate(',$classid,',classpath)>0");
+		$classpath=getClassPath('g_nclass',$classid); 
+		$db->query("delete from g_nclass where classid in ($classpath)");
+		$db->query("delete from g_news where classid in ($classpath)");
 		return true;
 	}else{
 		return false;
 	}
 	return false;
-}
-
-//保存classpath路径,newid:当前插入操作ID
-function savepath($newid,$parentid){
-	global $db;
-	if(empty($newid)){ return false; }
-	if($parentid==0){ 
-		$classpath='0,'.$newid.',';
-	}else{
-		$sql='select classpath from g_nclass where classid='.(int)$parentid;
-		$query = $db -> query($sql);
-		if($row = $db -> fetch_array($query)){
-			$classpath=$row['classpath'].$newid.','; //父节点的路径	
-		}
-	}
-	return $db -> query("update g_nclass set classpath='$classpath' where classid=".(int)$newid);
 }
 ?>
